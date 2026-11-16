@@ -21,6 +21,10 @@ class CSVProducer:
 
        TODO : Implement the __init__ method to initialize the producer.
        """
+        self.q=q
+        self.csv_path= csv_path
+        self.delay= delay
+    
     def start(self):
         """
         This method should:
@@ -30,11 +34,23 @@ class CSVProducer:
         4. Push it into the queue 
         5. Sleep for 'delay' seconds to simulate streaming.
 
+
         TODO:
         - Implement the streaming behavior.
         - Optional: Add random jitter to simulate irregular network delays.
         """
-      
+
+        
+
+        with open(self.csv_path, newline="", encoding="utf-8") as f:
+            lecteur = csv.reader(f)
+            next(lecteur)
+            for ligne in lecteur:
+                print("Sent :", ligne)  
+                self.q.put(ligne)
+                time.sleep(self.delay)
+                             
+
 
 
 # Debugging test
@@ -46,4 +62,8 @@ if __name__ == "__main__":
     Expected behavior:
     - It should print rows from the CSV file every 'delay' seconds.
     """
+    
+    q = Queue()
+    producer = CSVProducer("transactions.csv", q, delay=1.0)
+    producer.start()
    

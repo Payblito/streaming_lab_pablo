@@ -21,6 +21,8 @@ class Consumer:
         - Initialize any state variables you may want later,
           e.g. a running total for stateful computations.
         """
+        self.q = q
+        self.running_total = 0
         
 
     def start(self):
@@ -32,6 +34,10 @@ class Consumer:
         - Print the event received.
         - Pass it to the process() function.
         """
+        while True:
+            line = self.q.get()
+            print(f"Received: {line}")
+            self.process(line)
     
 
     def process(self, event):
@@ -42,6 +48,16 @@ class Consumer:
         - Implement optional filtering conditions.
         - Update any state (example: running total).
         """
+        print("Processing the line : ", event)
+        event[2]=float(event[2])
+        self.running_total += 1
+        print("Runned total :", self.running_total)
+        time.sleep(0.5) 
+    
+
+
+
+
    
 
 # Debugging test
@@ -55,3 +71,4 @@ if __name__ == "__main__":
     q = Queue()
     consumer = Consumer(q)
     consumer.start()
+
